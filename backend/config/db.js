@@ -1,7 +1,7 @@
 require('dotenv').config();
-// La integración Supabase de Vercel crea POSTGRES_URL.
-// DATABASE_URL se conserva para despliegues que usen el nombre convencional.
-const postgresUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+// La integración Supabase de Vercel administra POSTGRES_URL y debe tener
+// prioridad sobre cualquier DATABASE_URL heredada de despliegues anteriores.
+const postgresUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
 const isPg = !!postgresUrl;
 
 let db;
