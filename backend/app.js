@@ -15,14 +15,31 @@ const horariosRoutes = require('./routes/horariosRoutes');
 
 const app = express();
 
-// Middlewares globales
-app.use(cors());
+// ── CORS ────────────────────────────────────────────────────────────────────
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:4000',
+  process.env.FRONTEND_BASE_URL,
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Permitir requests sin origin (Postman, curl, servidor a servidor)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.some(o => origin.startsWith(o))) return callback(null, true);
+    return callback(new Error(`CORS: origen no permitido: ${origin}`));
+  },
+  credentials: true,
+}));
+
 app.use(express.json());
 
-// Servir estáticamente las fotos subidas de los médicos
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// ── Archivos estáticos de uploads (solo en local) ───────────────────────────
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+}
 
-// Montar endpoints
+// ── Endpoints ───────────────────────────────────────────────────────────────
 app.use('/pacientes', pacientesRoutes);
 app.use('/medicos', medicosRoutes);
 app.use('/reservas', reservasRoutes);
@@ -32,7 +49,10 @@ app.use('/admin', adminRoutes);
 app.use('/crm', crmRoutes);
 app.use('/horarios', horariosRoutes);
 
-// Manejo de errores global
+// Health check para Vercel
+app.get('/health', (req, res) => res.json({ ok: true, env: process.env.NODE_ENV }));
+
+// ── Manejo de errores global ─────────────────────────────────────────────────
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(err.status || 500).json({
