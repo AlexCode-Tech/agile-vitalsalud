@@ -17,7 +17,8 @@
     "multer": "^2.2.0",
     "mysql2": "^3.22.5",
     "node-cron": "^4.4.1",
-    "nodemailer": "^9.0.1"
+    "nodemailer": "^9.0.1",
+    "pg": "^8.22.0"
   },
   "devDependencies": {
     "jest": "^30.4.2",

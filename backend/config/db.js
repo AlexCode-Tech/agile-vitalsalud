@@ -1,5 +1,5 @@
-const isPg = !!process.env.DATABASE_URL;
 require('dotenv').config();
+const isPg = !!process.env.DATABASE_URL;
 
 let db;
 
