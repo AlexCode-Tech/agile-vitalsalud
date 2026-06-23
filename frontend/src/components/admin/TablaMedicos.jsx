@@ -334,7 +334,7 @@ export default function TablaMedicos({ refreshTrigger }) {
               <th scope="col" className="px-6 py-4">Nombre</th>
               <th scope="col" className="px-6 py-4">Especialidad</th>
               <th scope="col" className="px-6 py-4">CMP</th>
-              <th scope="col" className="px-6 py-4">DNI</th>
+              <th scope="col" className="px-6 py-4">Código</th>
               <th scope="col" className="px-6 py-4">Fecha de Recertificación</th>
               <th scope="col" className="px-6 py-4">Teléfono</th>
               <th scope="col" className="px-6 py-4 text-right">Acciones</th>
@@ -364,7 +364,7 @@ export default function TablaMedicos({ refreshTrigger }) {
                 </td>
                 <td className="px-6 py-4">{medico.especialidad}</td>
                 <td className="px-6 py-4 font-mono text-xs">{medico.colegiatura ? medico.colegiatura.replace(/^CMP/i, '') : ''}</td>
-                <td className="px-6 py-4 font-mono text-xs text-slate-300">{medico.dni || <span className="text-slate-600">—</span>}</td>
+                <td className="px-6 py-4 font-mono text-xs text-slate-300">{medico.codigo || <span className="text-slate-600">—</span>}</td>
                 <td className="px-6 py-4">
                   <div className="flex flex-col gap-1 w-max">
                     <span className="text-xs font-mono">{getFechaFin(medico.fecha_recertificacion)}</span>
@@ -396,7 +396,7 @@ export default function TablaMedicos({ refreshTrigger }) {
             ))}
             {medicosFiltrados.length === 0 && (
               <tr>
-                <td colSpan="7" className="px-6 py-8 text-center text-slate-500">
+                <td colSpan="8" className="px-6 py-8 text-center text-slate-500">
                   No se encontraron médicos con los filtros seleccionados.
                 </td>
               </tr>
