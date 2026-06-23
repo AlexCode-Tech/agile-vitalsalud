@@ -19,6 +19,8 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:4000',
+  'https://agile-vitalsalud-42ap.vercel.app',
+  // También permite cualquier subdominio de preview de Vercel
   process.env.FRONTEND_BASE_URL,
 ].filter(Boolean);
 

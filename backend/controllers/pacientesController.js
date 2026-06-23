@@ -181,8 +181,12 @@ exports.consultarReniec = async (req, res) => {
   }
 
   try {
-    const token = 'sk_16600.qyEkRmvwIUSrVQpEtYOiSoXNG4Ty6vx4';
-    const url = `http://api.decolecta.com/v1/reniec/dni?numero=${dni}`;
+    const token = process.env.RENIEC_API_TOKEN;
+    if (!token) {
+      return res.status(503).json({ mensaje: 'Servicio RENIEC no configurado.' });
+    }
+
+    const url = `https://api.decolecta.com/v1/reniec/dni?numero=${dni}`;
 
     console.log(`[Reniec API] Consultando DNI: ${dni} a Decolecta...`);
     const response = await fetch(url, {

@@ -1,12 +1,12 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false, // true for 465, false for other ports
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: Number(process.env.SMTP_PORT || 587),
+  secure: String(process.env.SMTP_SECURE || 'false').toLowerCase() === 'true',
   auth: {
-    user: 'aleeexpsm2005@gmail.com',
-    pass: 'igcxcutcqhpyrprw' // Contraseña de aplicación sin espacios
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
   }
 });
 
@@ -16,8 +16,12 @@ const transporter = nodemailer.createTransport({
  * @param {string} codigo 
  */
 async function enviarCodigoVerificacion(correo, codigo) {
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    throw new Error('SMTP_USER y SMTP_PASS no están configurados.');
+  }
+
   const info = await transporter.sendMail({
-    from: 'aleeexpsm2005@gmail.com',
+    from: process.env.SMTP_FROM || process.env.SMTP_USER,
     to: correo,
     subject: 'Código de Verificación - VitalSalud',
     text: `Hola,\n\nGracias por registrarte en VitalSalud.\n\nTu código de verificación es: ${codigo}\n\nIngresa este código en el sistema para activar tu cuenta.\n\nSaludos,\nEl equipo de VitalSalud`,

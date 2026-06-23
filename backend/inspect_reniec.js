@@ -1,6 +1,11 @@
-const token = 'sk_16600.qyEkRmvwIUSrVQpEtYOiSoXNG4Ty6vx4';
+require('dotenv').config();
+const token = process.env.RENIEC_API_TOKEN;
+
+if (!token) {
+  throw new Error('RENIEC_API_TOKEN no está configurado.');
+}
 const dni = '76158376';
-const url = `http://api.decolecta.com/v1/reniec/dni?numero=${dni}`;
+const url = `https://api.decolecta.com/v1/reniec/dni?numero=${dni}`;
 
 fetch(url, {
   method: 'GET',

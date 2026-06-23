@@ -1,5 +1,8 @@
 require('dotenv').config();
-const isPg = !!process.env.DATABASE_URL;
+// La integración Supabase de Vercel crea POSTGRES_URL.
+// DATABASE_URL se conserva para despliegues que usen el nombre convencional.
+const postgresUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+const isPg = !!postgresUrl;
 
 let db;
 
@@ -8,7 +11,7 @@ if (isPg) {
   const { Pool } = require('pg');
 
   const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: postgresUrl,
     ssl: { rejectUnauthorized: false },
     max: 10,
   });

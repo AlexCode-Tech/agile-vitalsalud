@@ -1,8 +1,13 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const os = require('os');
 
-const uploadDir = path.join(__dirname, '../uploads');
+// Vercel solo permite escritura en el directorio temporal del sistema.
+const uploadDir = process.env.VERCEL
+  ? path.join(os.tmpdir(), 'vitalsalud-uploads')
+  : path.join(__dirname, '../uploads');
+
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
