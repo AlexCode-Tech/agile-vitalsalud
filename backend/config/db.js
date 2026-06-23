@@ -1,7 +1,18 @@
 require('dotenv').config();
 // La integración Supabase de Vercel administra POSTGRES_URL y debe tener
 // prioridad sobre cualquier DATABASE_URL heredada de despliegues anteriores.
-const postgresUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+const rawPostgresUrl = process.env.POSTGRES_URL || process.env.DATABASE_URL;
+let postgresUrl = rawPostgresUrl;
+
+if (rawPostgresUrl) {
+  const parsedUrl = new URL(rawPostgresUrl);
+  // pg interpreta estos parámetros y reemplaza el objeto ssl definido abajo.
+  // Supabase usa una cadena administrada; mantenemos TLS pero permitimos su CA.
+  ['sslmode', 'sslcert', 'sslkey', 'sslrootcert'].forEach((key) => {
+    parsedUrl.searchParams.delete(key);
+  });
+  postgresUrl = parsedUrl.toString();
+}
 const isPg = !!postgresUrl;
 
 let db;
